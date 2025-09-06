@@ -21,15 +21,41 @@ _SENTINEL_CONFIG = {
 }
 
 # --- Public Functions ---
-
 def init(api_key: str):
-    """Initializes the Sentinel SDK with the user's project key."""
+    """
+    Initializes the Sentinel SDK.
+    This verifies the key with the backend and fetches the current budget state.
+    """
     if not api_key or not api_key.startswith("api-sentinel_pk_"):
         raise ValueError("A valid Sentinel API key (api-sentinel_pk_...) is required.")
-    
+
     _SENTINEL_CONFIG["api_key"] = api_key
-    # In a real product, we would fetch the initial budget from the backend here.
-    # For the MVP, we can assume it starts at 0 and gets updated.
+
+    print("[API - SENTINEL] Verifying key and fetching latest budget...")
+    try:
+        headers = {"X-Sentinel-Key": api_key}
+        response = requests.get(
+            f"{_SENTINEL_CONFIG['backend_url']}/keys/verify",
+            headers=headers,
+            timeout=5
+        )
+        response.raise_for_status() # Raise an error for bad responses (4xx or 5xx)
+
+        # Update the local state with the data from the backend
+        data = response.json()
+        _SENTINEL_CONFIG["project_id"] = data["project_id"]
+        _SENTINEL_CONFIG["monthly_budget"] = data["monthly_budget"]
+        _SENTINEL_CONFIG["current_usage"] = data["current_usage"]
+
+        print("SENTINEL: Initialization successful. Budget is ready.")
+
+    except requests.HTTPError as e:
+        if e.response.status_code == 401:
+            raise ValueError("Invalid Sentinel API key. Please check your key on the dashboard.") from e
+        else:
+            raise RuntimeError(f"[API - SENTINEL] Could not connect to backend. Status: {e.response.status_code}") from e
+    except requests.RequestException as e:
+        raise RuntimeError(f"[API - SENTINEL] Could not connect to backend. Network error: {e}") from e
 
 def wrap(client, adapter):
     """
