@@ -1,2 +1,5 @@
 .venv/
 .DS_Store
+/api_sentinel.egg-info
+__pycache__/
+*.pyc
