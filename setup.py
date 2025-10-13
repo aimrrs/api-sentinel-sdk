@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setup(
     name="api-sentinel-sdk",
-    version="0.1.0",
+    version="1.0.0",
     author="aimrrs",
     author_email="aimrrs404@gmail.com",
     description="A lightweight SDK for real-time API cost monitoring and control.",
@@ -29,10 +29,11 @@ setup(
             "pytest-cov>=2.0",
             "black>=21.0",
             "flake8>=3.8",
+            "mypy>=0.910",
         ],
     },
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
