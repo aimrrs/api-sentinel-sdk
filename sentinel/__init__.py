@@ -14,11 +14,11 @@ __all__ = [
 # --- Global State ---
 _SENTINEL_CONFIG = {
     "api_key": None,
-    "backend_url": "http://127.0.0.1:8000", "https://api-sentinel-backend.onrender.com/"
+    "backend_url": "https://api-sentinel-production.up.railway.app/",
     "project_id": None,
     "monthly_budget": 0,
     "current_usage": 0,
-    "usd_to_inr_rate": 83.50,
+    "usd_to_inr_rate": 0,
     "pricing_cache": {}, 
 }
 
@@ -28,8 +28,8 @@ def init(api_key: str):
     Initializes the Sentinel SDK.
     Fetches generic state (budget, usage, rate) but NOT specific pricing.
     """
-    if not api_key or not api_key.startswith("sentinel_pk_"):
-        raise ValueError("A valid Sentinel API key (sentinel_pk_...) is required.")
+    if not api_key or not api_key.startswith("api-sentinel_pk_"):
+        raise ValueError("A valid Sentinel API key (api-sentinel_pk_...) is required.")
 
     _SENTINEL_CONFIG["api_key"] = api_key
     
