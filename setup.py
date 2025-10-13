@@ -48,4 +48,6 @@ setup(
     keywords="api monitoring sdk sentinel cost tracking openai",
     python_requires='>=3.8',
     include_package_data=True,
+    license="MIT",
+    license_files=["LICENSE"],
 )
